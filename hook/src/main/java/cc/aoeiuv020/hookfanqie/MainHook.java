@@ -90,7 +90,7 @@ public class MainHook implements IXposedHookLoadPackage {
                 String leftTime = (String) args[2];
                 boolean isAutoCharge = (boolean) args[3];
                 boolean isUnionVip = (boolean) args[4];
-                String union_source = (int) args[5];
+                int union_source = (int) args[5];
                 args[0] = "4102415999";
                 args[1] = "1";
                 args[2] = "10000";
