@@ -22,9 +22,32 @@ public class MainHook implements IXposedHookLoadPackage {
             protected void afterHookedMethod(MethodHookParam param) throws Throwable {
                 if (!(param.args[0] instanceof Application)) return;
                 hookDebug(lpparam);
+                hookVip(lpparam);
+                hookKillAd(lpparam);
             }
         });
 
+    }
+
+    private void hookKillAd(XC_LoadPackage.LoadPackageParam lpparam) {
+        XposedHelpers.findAndHookMethod("com.dragon.read.user.h", lpparam.classLoader, "e", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                super.beforeHookedMethod(param);
+            }
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                super.afterHookedMethod(param);
+            }
+        });    }
+
+    private void hookVip(XC_LoadPackage.LoadPackageParam lpparam) {
+        XposedHelpers.findAndHookMethod("com.dragon.read.user.h", lpparam.classLoader, "a", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                param.setResult(true);
+            }
+        });
     }
 
     private void log(XC_MethodHook.MethodHookParam param) {
