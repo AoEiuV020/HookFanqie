@@ -19,5 +19,23 @@ com.dragon.read.pages.main.MainFragmentActivity
 但先不管，
 
 福利标签相关都是以“LuckyDog”开头，  
-不过有个单独的开关，  
+不过有个单独的开关，
+
+5.8.5.18:
+
+小说阅读页是，  
+com.dragon.read.reader.ReaderActivity
+
+章节末尾的广告判断在，  
+com.dragon.read.ad.b.c.a#a
+
+搜索"看视频免30分钟广告"定位到激励视频入口在，  
+com.dragon.read.ad.j#a  
+改这个属性可以修改广告类型，但似乎无法关闭，  
+com.dragon.read.reader.ad.model.l$a#d
+
+跟踪时找到"video_reader_ad"，进一步找到读取配置的方法，  
+com.dragon.read.base.ad.a#a  
+这里有好多个带ad的属性，都改成false关闭，应该可以关闭一些广告，  
+
 

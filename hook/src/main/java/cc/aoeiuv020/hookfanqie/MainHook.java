@@ -1,8 +1,8 @@
 package cc.aoeiuv020.hookfanqie;
 
-import android.app.Application;
-import android.app.Instrumentation;
 import android.content.Context;
+
+import java.util.Objects;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
@@ -18,19 +18,14 @@ public class MainHook implements IXposedHookLoadPackage {
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         XposedBridge.log("handleLoadPackage: " + lpparam.processName + ", " + lpparam.packageName);
-        XposedHelpers.findAndHookMethod(Instrumentation.class, "callApplicationOnCreate", Application.class, new XC_MethodHook() {
-            @Override
-            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                if (!(param.args[0] instanceof Application)) return;
-                hookDebug(lpparam);
-                hookVip(lpparam);
-                hookKillAd(lpparam);
-                hookUpdate(lpparam);
-                hookPoplive(lpparam);
-                hookLuckyDog(lpparam);
-            }
-        });
-
+        if (Objects.equals(lpparam.processName, lpparam.packageName)) {
+            // hookDebug(lpparam);
+            hookVip(lpparam);
+            hookKillAd(lpparam);
+            hookUpdate(lpparam);
+            hookPoplive(lpparam);
+            hookLuckyDog(lpparam);
+        }
     }
 
     private void hookLuckyDog(XC_LoadPackage.LoadPackageParam lpparam) {
@@ -57,6 +52,14 @@ public class MainHook implements IXposedHookLoadPackage {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 param.setResult(true);
+            }
+        });
+        XposedHelpers.findAndHookMethod("com.dragon.read.base.ad.a", lpparam.classLoader, "a", java.lang.String.class, java.lang.String.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                if (param.args[0].toString().contains("_ad")) {
+                    param.setResult(false);
+                }
             }
         });
     }
@@ -93,7 +96,7 @@ public class MainHook implements IXposedHookLoadPackage {
     }
 
     private void log(XC_MethodHook.MethodHookParam param) {
-        XposedBridge.log("hook: " + param.thisObject.getClass().getName() + "." + param.method.getName());
+        XposedBridge.log("hook: " + param.method.getDeclaringClass().getName() + "." + param.method.getName());
         if (DEBUG) {
             XposedBridge.log(new Throwable());
         }
