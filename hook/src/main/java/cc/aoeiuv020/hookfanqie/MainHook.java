@@ -68,7 +68,7 @@ public class MainHook implements IXposedHookLoadPackage {
         XposedHelpers.findAndHookMethod("com.ss.android.update.ad", lpparam.classLoader, "k", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                param.setResult(true);
+                param.setResult(false);
             }
         });
     }
