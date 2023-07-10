@@ -9,6 +9,11 @@ on:
       - '**/README.md'
       - '.github/workflows/*'
       - '!.github/workflows/main.yml'
+  pull_request:
+    paths-ignore:
+      - '/readme/*'
+      - '**/README.md'
+      - '.github/workflows/*'
 
 jobs:
   build:
