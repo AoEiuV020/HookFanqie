@@ -2,13 +2,13 @@ package cc.aoeiuv020.hookfanqie;
 
 import android.app.Application;
 import android.app.Instrumentation;
+import android.content.Context;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
-import java.lang.reflect.Method;
 
 @SuppressWarnings("RedundantThrows")
 public class MainHook implements IXposedHookLoadPackage {
@@ -43,22 +43,13 @@ public class MainHook implements IXposedHookLoadPackage {
     }
 
     private void hookPoplive(XC_LoadPackage.LoadPackageParam lpparam) {
-        try {
-            Class<?> clazz = XposedHelpers.findClass("com.dragon.read.widget.m", lpparam.classLoader);
-            Method[] methods = XposedHelpers.findMethodsByExactParameters(clazz, null);
-            for (Method method : methods) {
-                if (method.getName().equals("a")) {
-                    XposedBridge.hookMethod(method, new XC_MethodReplacement() {
-                        @Override
-                        protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
-                            return null;
-                        }
-                    });
-                }
+        XposedHelpers.findAndHookMethod("com.dragon.read.component.audio.impl.ui.b.a", lpparam.classLoader, "a",
+            Context.class, String.class, String.class, new XC_MethodHook() {
+            @Override
+            protected void afterHookedMethod(MethodHookParam param) throws Throwable {
+                param.setResult(null);
             }
-        } catch (Throwable t) {
-            XposedBridge.log(t);
-        }
+        });
     }
 
     private void hookKillAd(XC_LoadPackage.LoadPackageParam lpparam) {
