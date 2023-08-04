@@ -11,3 +11,6 @@ xposed给番茄小说(com.dragon.read)去广告，
 
 已知不支持用于LSPatch注入破解目标app，  
 本项目不提供破解版相关支持，只提供LSPosed支持，  
+
+## TODO
+1. 移除商城和相关对话框，
