@@ -1,10 +1,9 @@
 apply plugin: 'com.android.application'
 android {
-
-// 签名信息从signing.properties中获取，
+// 签名信息从key.properties中获取，
 // debug和release使用相同签名，以便用debug包覆盖release包从而调试，
 // 如果没有，就会使用默认debug签名，
-    def signingFile = rootProject.file('signing.properties')
+    def signingFile = rootProject.file('key.properties')
     String sha1 = null
     if (signingFile.exists()) {
         def input = signingFile.newInputStream()
@@ -20,8 +19,10 @@ android {
                     keyPassword p['keyPassword']
                     storeFile jks
                     storePassword p['storePassword']
-                    v1SigningEnabled true
-                    v2SigningEnabled true
+                    enableV1Signing true
+                    enableV2Signing true
+                    enableV3Signing true
+                    enableV4Signing true
                 }
             }
             buildTypes {
@@ -30,7 +31,7 @@ android {
             }
             def signingConfig = signingConfigs.config
             if (signingConfig != null) {
-                //noinspection UnnecessaryQualifiedReference
+                // noinspection UnnecessaryQualifiedReference
                 def keyStore = java.security.KeyStore.getInstance(
                         signingConfig.getStoreType() != null ?
                                 signingConfig.getStoreType() : KeyStore.getDefaultType())
@@ -38,12 +39,12 @@ android {
                 keyStore.load(fis, signingConfig.getStorePassword().toCharArray())
                 fis.close()
                 char[] keyPassword = signingConfig.getKeyPassword().toCharArray()
-                //noinspection UnnecessaryQualifiedReference
+                // noinspection UnnecessaryQualifiedReference
                 def entry = keyStore.getEntry(
                         signingConfig.getKeyAlias(),
                         new java.security.KeyStore.PasswordProtection(keyPassword))
                 if (entry != null) {
-                    //noinspection UnnecessaryQualifiedReference
+                    // noinspection UnnecessaryQualifiedReference
                     def digest = java.security.MessageDigest.getInstance("SHA-1")
                     sha1 = digest.digest(entry.getCertificate().encoded).encodeHex().toString()
                 }
