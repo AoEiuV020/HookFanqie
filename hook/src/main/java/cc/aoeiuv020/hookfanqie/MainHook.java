@@ -21,10 +21,10 @@ public class MainHook implements IXposedHookLoadPackage {
         if (Objects.equals(lpparam.processName, lpparam.packageName)) {
             // hookDebug(lpparam);
             hookVip(lpparam);
-            hookKillAd(lpparam);
-            hookUpdate(lpparam);
-            hookPoplive(lpparam);
-            hookLuckyDog(lpparam);
+            // hookKillAd(lpparam);
+            // hookUpdate(lpparam);
+            // hookPoplive(lpparam);
+            // hookLuckyDog(lpparam);
         }
     }
 
@@ -74,25 +74,20 @@ public class MainHook implements IXposedHookLoadPackage {
     }
 
     private void hookVip(XC_LoadPackage.LoadPackageParam lpparam) {
-        XposedHelpers.findAndHookConstructor("com.dragon.read.user.model.VipInfoModel", lpparam.classLoader,
-                String.class, String.class, String.class, boolean.class, boolean.class, int.class, new XC_MethodHook() {
-                    @Override
-                    protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                        Object[] args = param.args;
-                        String expireTime = (String) args[0];
-                        String isVip = (String) args[1];
-                        String leftTime = (String) args[2];
-                        boolean isAutoCharge = (boolean) args[3];
-                        boolean isUnionVip = (boolean) args[4];
-                        int union_source = (int) args[5];
-                        args[0] = "4102415999";
-                        args[1] = "1";
-                        args[2] = "10000";
-                        args[3] = true;
-                        args[4] = true;
-                        args[5] = 1;
-                    }
-                });
+        XposedHelpers.findAndHookConstructor("com.dragon.read.user.model.VipInfoModel", lpparam.classLoader, "java.lang.String", "java.lang.String", "java.lang.String", boolean.class, boolean.class, int.class, boolean.class, "com.dragon.read.rpc.model.VipSubType", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                Object[] args = param.args;
+                args[0] = "4102415999"; // expireTime
+                args[1] = "1"; // isVip
+                args[2] = "10000"; // leftTime
+                args[3] = true; // isAutoCharge
+                args[4] = true; // isUnionVip
+                args[5] = 1; // union_source
+                args[6] = true; // isAdVip
+                args[7] = 0; // vipSubType
+            }
+        });
     }
 
     private void log(XC_MethodHook.MethodHookParam param) {

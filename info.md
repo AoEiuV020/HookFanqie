@@ -40,3 +40,4 @@ com.dragon.read.base.ad.a#a
 
 
 6.5.5.32:
+vip还是com.dragon.read.user.model.VipInfoModel，但是构造方法参数变多了， 
