@@ -22,7 +22,7 @@ public class MainHook implements IXposedHookLoadPackage {
             // hookDebug(lpparam);
             hookVip(lpparam);
             // hookKillAd(lpparam);
-            // hookUpdate(lpparam);
+            hookUpdate(lpparam);
             // hookPoplive(lpparam);
             hookLuckyDog(lpparam);
         }

@@ -45,3 +45,4 @@ vip还是com.dragon.read.user.model.VipInfoModel，但是构造方法参数变�
 有个 NsVipApi.IMPL.privilegeService().hasNoAdFollAllScene() 所有广告场景免广告，看着不错，但是这种接口不好hook,
 有个 com.dragon.read.app.i.b 最小合规必要开关, 这个好像影响范围很大，都是良心向的，但实际就是“简单模式”，功能有限制，无法登录，
 搜"gold_reverse"找到福利tag的开关，
+搜”isCurrentVersionOut“去除更新提示，
