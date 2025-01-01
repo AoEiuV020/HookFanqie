@@ -51,3 +51,5 @@ hook hasNoAdFollAllScene的话章末商品广告不会有，但会出现一个�
 搜"video_reader_ad"找到读取配置的方法，可以关闭那个看视频的文字链接，
 用appiumInspector解析我的页面，找控件id再找R中这个id的引用，能找到我的页面com.dragon.read.component.biz.impl.mine.FanqieMineFragmentV2，
 通过id找到我的页面会员卡片判断的是privilegeManager().canShowVipRelational()，return false去掉，
+但canShowVipRelational会连vip标签都删掉，导致无法区分部分vip出版书，
+hook canShowVipEntranceHere可以，保留书籍的vip标签，其他vip都没了，

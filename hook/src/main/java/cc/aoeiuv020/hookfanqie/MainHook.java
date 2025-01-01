@@ -85,16 +85,16 @@ public class MainHook implements IXposedHookLoadPackage {
         }
         XposedHelpers.findAndHookMethod(clazz, "a", "com.dragon.read.rpc.model.VipSubType", returnTrue);
         XposedHelpers.findAndHookMethod(clazz, "isNoAd", "java.lang.String", returnTrue);
-        XposedHelpers.findAndHookMethod(clazz, "canShowVipRelational", returnFalse);
+        // canShowVipRelational影响太大，出版书vip和非vip无法区分，
+        // XposedHelpers.findAndHookMethod(clazz, "canShowVipRelational", returnFalse);
+        // 这个只影响我的页面会员卡片，
+        // XposedHelpers.findAndHookMethod("com.dragon.read.component.biz.impl.mine.FanqieMineFragmentV2", lpparam.classLoader, "d", returnNull);
+        // 针对所有会员展示，
+        XposedHelpers.findAndHookMethod("com.dragon.read.component.biz.impl.NsVipImpl", lpparam.classLoader, "canShowVipEntranceHere", "com.dragon.read.component.biz.api.data.VipEntrance", returnFalse);
     }
 
     private void hookUpdate(XC_LoadPackage.LoadPackageParam lpparam) {
-        XposedHelpers.findAndHookMethod("com.ss.android.update.ad", lpparam.classLoader, "k", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                param.setResult(false);
-            }
-        });
+        XposedHelpers.findAndHookMethod("com.ss.android.update.ad", lpparam.classLoader, "k", returnFalse);
     }
 
     private void hookVip(XC_LoadPackage.LoadPackageParam lpparam) {
@@ -141,18 +141,11 @@ public class MainHook implements IXposedHookLoadPackage {
 
     @SuppressWarnings("unused")
     private void nothing(XC_LoadPackage.LoadPackageParam lpparam, String clazz, String... methods) {
-        var r = new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                log(param);
-                param.setResult(null);
-            }
-        };
         for (String method : methods) {
             try {
                 XposedHelpers.findAndHookMethod(
                         clazz,
-                        lpparam.classLoader, method, r
+                        lpparam.classLoader, method, returnNull
                 );
             } catch (Throwable t) {
                 XposedBridge.log(t);
@@ -171,6 +164,13 @@ public class MainHook implements IXposedHookLoadPackage {
         protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
             log(param);
             return false;
+        }
+    };
+    XC_MethodHook returnNull = new XC_MethodReplacement() {
+        @Override
+        protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+            log(param);
+            return null;
         }
     };
 }
