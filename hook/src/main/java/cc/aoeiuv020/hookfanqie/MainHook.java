@@ -1,6 +1,7 @@
 package cc.aoeiuv020.hookfanqie;
 
-import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 
 import java.util.Objects;
 
@@ -12,14 +13,11 @@ import de.robv.android.xposed.callbacks.XC_LoadPackage;
 
 @SuppressWarnings("RedundantThrows")
 public class MainHook implements IXposedHookLoadPackage {
-    @SuppressWarnings("All")
-    private static final boolean DEBUG = BuildConfig.DEBUG && true;
-
     @Override
     public void handleLoadPackage(XC_LoadPackage.LoadPackageParam lpparam) throws Throwable {
         XposedBridge.log("handleLoadPackage: " + lpparam.processName + ", " + lpparam.packageName);
         if (Objects.equals(lpparam.processName, lpparam.packageName)) {
-            // hookDebug(lpparam);
+            hookDebug(lpparam);
             hookVip(lpparam);
             // hookKillAd(lpparam);
             hookUpdate(lpparam);
@@ -81,15 +79,12 @@ public class MainHook implements IXposedHookLoadPackage {
 
     private void log(XC_MethodHook.MethodHookParam param) {
         XposedBridge.log("hook: " + param.method.getDeclaringClass().getName() + "." + param.method.getName());
-        if (DEBUG) {
+        if (Objects.equals(BuildConfig.logStackTrace, "true")) {
             XposedBridge.log(new Throwable());
         }
     }
 
     private void hookDebug(XC_LoadPackage.LoadPackageParam lpparam) {
-        if (!DEBUG) {
-            return;
-        }
         var r = new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
@@ -98,10 +93,12 @@ public class MainHook implements IXposedHookLoadPackage {
             }
         };
 
-        XposedHelpers.findAndHookMethod(
-                "android.app.Activity",
-                lpparam.classLoader, "onResume", r
-        );
+        if (Objects.equals(BuildConfig.hookResume, "true")) {
+            XposedHelpers.findAndHookMethod("android.app.Activity", lpparam.classLoader, "onResume", r);
+        }
+        if (Objects.equals(BuildConfig.hookStartActivity, "true")) {
+            XposedHelpers.findAndHookMethod("android.app.Activity", lpparam.classLoader, "startActivity", Intent.class, Bundle.class, r);
+        }
     }
 
     @SuppressWarnings("unused")
