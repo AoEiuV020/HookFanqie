@@ -23,7 +23,6 @@ public class MainHook implements IXposedHookLoadPackage {
             hookVip(lpparam);
             // hookKillAd(lpparam);
             hookUpdate(lpparam);
-            // hookPoplive(lpparam);
             hookLuckyDog(lpparam);
         }
     }
@@ -35,16 +34,6 @@ public class MainHook implements IXposedHookLoadPackage {
                 param.setResult(false);
             }
         });
-    }
-
-    private void hookPoplive(XC_LoadPackage.LoadPackageParam lpparam) {
-        XposedHelpers.findAndHookMethod("com.dragon.read.component.audio.impl.ui.b.a", lpparam.classLoader, "a",
-                Context.class, String.class, String.class, new XC_MethodHook() {
-                    @Override
-                    protected void afterHookedMethod(MethodHookParam param) throws Throwable {
-                        param.setResult(null);
-                    }
-                });
     }
 
     private void hookKillAd(XC_LoadPackage.LoadPackageParam lpparam) {
