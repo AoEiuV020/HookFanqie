@@ -109,7 +109,8 @@ public class MainHook implements IXposedHookLoadPackage {
                 args[4] = true; // isUnionVip
                 args[5] = 1; // union_source
                 args[6] = true; // isAdVip
-                args[7] = 0; // vipSubType
+                args[7] = XposedHelpers.getStaticObjectField(XposedHelpers.findClass("com.dragon.read.rpc.model.VipSubType", lpparam.classLoader),
+                        "Default"); // vipSubType
             }
         });
     }
