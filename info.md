@@ -53,3 +53,4 @@ hook hasNoAdFollAllScene的话章末商品广告不会有，但会出现一个�
 通过id找到我的页面会员卡片判断的是privilegeManager().canShowVipRelational()，return false去掉，
 但canShowVipRelational会连vip标签都删掉，导致无法区分部分vip出版书，
 hook canShowVipEntranceHere可以，保留书籍的vip标签，其他vip都没了，
+通过控件addView找到我的页面很多东西都是CardType控制的，判断CardType.EC_MAIL可以去掉我的页面商城广告，

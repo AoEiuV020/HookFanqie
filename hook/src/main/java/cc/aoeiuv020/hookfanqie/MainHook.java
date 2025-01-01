@@ -91,6 +91,16 @@ public class MainHook implements IXposedHookLoadPackage {
         // XposedHelpers.findAndHookMethod("com.dragon.read.component.biz.impl.mine.FanqieMineFragmentV2", lpparam.classLoader, "d", returnNull);
         // 针对所有会员展示，
         XposedHelpers.findAndHookMethod("com.dragon.read.component.biz.impl.NsVipImpl", lpparam.classLoader, "canShowVipEntranceHere", "com.dragon.read.component.biz.api.data.VipEntrance", returnFalse);
+
+        XposedHelpers.findAndHookMethod("com.dragon.read.component.biz.impl.mine.card.c", lpparam.classLoader, "a", "com.dragon.read.component.biz.api.model.d", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                var cardType = (Enum<?>) XposedHelpers.getObjectField(param.args[0], "a");
+                if (Objects.equals(cardType.name(), "EC_MAIL")) {
+                    param.setResult(null);
+                }
+            }
+        });
     }
 
     private void hookUpdate(XC_LoadPackage.LoadPackageParam lpparam) {
