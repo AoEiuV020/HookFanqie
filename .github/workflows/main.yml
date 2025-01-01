@@ -90,14 +90,14 @@ jobs:
           SIGNING_KEY: ${{ secrets.SIGNING_KEY }}
         if: ${{ env.SIGNING_KEY != '' }}
         with:
-          releaseDirectory: ./hook/build/outputs/apk/release
+          releaseDirectory: build/.hook/outputs/apk/release
           signingKeyBase64: ${{ secrets.SIGNING_KEY }}
           alias: ${{ secrets.ALIAS }}
           keyStorePassword: ${{ secrets.KEY_PASSWORD }}
           keyPassword: ${{ secrets.KEY_PASSWORD }}
       - name: Build with Gradle
         run: |
-          find ./hook/build/outputs/apk/release -name '*.apk' -exec mv {} $BUILD_NAME_WITH_VERSION-hook.apk \;
+          find ./build/.hook/outputs/apk/release -name '*.apk' -exec mv {} $BUILD_NAME_WITH_VERSION-hook.apk \;
       - name: Upload APK
         uses: actions/upload-artifact@v4
         with:
