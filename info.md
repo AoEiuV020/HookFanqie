@@ -49,3 +49,5 @@ vip还是com.dragon.read.user.model.VipInfoModel，但是构造方法参数变�
 搜”implements NsPrivilegeManager“找到了privilegeService实现类，
 hook hasNoAdFollAllScene的话章末商品广告不会有，但会出现一个”看视频免30分钟广告“的文字链接，
 搜"video_reader_ad"找到读取配置的方法，可以关闭那个看视频的文字链接，
+用appiumInspector解析我的页面，找控件id再找R中这个id的引用，能找到我的页面com.dragon.read.component.biz.impl.mine.FanqieMineFragmentV2，
+通过id找到我的页面会员卡片判断的是privilegeManager().canShowVipRelational()，return false去掉，

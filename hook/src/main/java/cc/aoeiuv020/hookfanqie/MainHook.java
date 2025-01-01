@@ -7,6 +7,7 @@ import java.util.Objects;
 
 import de.robv.android.xposed.IXposedHookLoadPackage;
 import de.robv.android.xposed.XC_MethodHook;
+import de.robv.android.xposed.XC_MethodReplacement;
 import de.robv.android.xposed.XposedBridge;
 import de.robv.android.xposed.XposedHelpers;
 import de.robv.android.xposed.callbacks.XC_LoadPackage;
@@ -71,13 +72,6 @@ public class MainHook implements IXposedHookLoadPackage {
                 }
             }
         });
-        var r = new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                param.setResult(true);
-                log(param);
-            }
-        };
         var clazz = XposedHelpers.findClass("com.dragon.read.component.biz.impl.i.f", lpparam.classLoader);
         String[] methods = {
                 "isVip",
@@ -87,10 +81,11 @@ public class MainHook implements IXposedHookLoadPackage {
                 "adVipAvailable",
         };
         for (String method : methods) {
-            XposedHelpers.findAndHookMethod(clazz, method, r);
+            XposedHelpers.findAndHookMethod(clazz, method, returnTrue);
         }
-        XposedHelpers.findAndHookMethod(clazz, "a", "com.dragon.read.rpc.model.VipSubType", r);
-        XposedHelpers.findAndHookMethod(clazz, "isNoAd", "java.lang.String", r);
+        XposedHelpers.findAndHookMethod(clazz, "a", "com.dragon.read.rpc.model.VipSubType", returnTrue);
+        XposedHelpers.findAndHookMethod(clazz, "isNoAd", "java.lang.String", returnTrue);
+        XposedHelpers.findAndHookMethod(clazz, "canShowVipRelational", returnFalse);
     }
 
     private void hookUpdate(XC_LoadPackage.LoadPackageParam lpparam) {
@@ -163,4 +158,18 @@ public class MainHook implements IXposedHookLoadPackage {
             }
         }
     }
+    XC_MethodHook returnTrue = new XC_MethodReplacement() {
+        @Override
+        protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+            log(param);
+            return true;
+        }
+    };
+    XC_MethodHook returnFalse = new XC_MethodReplacement() {
+        @Override
+        protected Object replaceHookedMethod(MethodHookParam param) throws Throwable {
+            log(param);
+            return false;
+        }
+    };
 }
