@@ -39,3 +39,4 @@ com.dragon.read.base.ad.a#a
 这里有好多个带ad的属性，都改成false关闭，应该可以关闭一些广告，  
 
 
+6.5.5.32:
