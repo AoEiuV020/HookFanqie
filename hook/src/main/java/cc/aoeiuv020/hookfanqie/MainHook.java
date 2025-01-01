@@ -18,11 +18,39 @@ public class MainHook implements IXposedHookLoadPackage {
         XposedBridge.log("handleLoadPackage: " + lpparam.processName + ", " + lpparam.packageName);
         if (Objects.equals(lpparam.processName, lpparam.packageName)) {
             hookDebug(lpparam);
+            hookLog(lpparam);
             hookVip(lpparam);
             hookKillAd(lpparam);
             hookUpdate(lpparam);
             hookLuckyDog(lpparam);
         }
+    }
+
+    private void hookLog(XC_LoadPackage.LoadPackageParam lpparam) {
+        var logLevel = Integer.parseInt(BuildConfig.logLevel);
+        XposedHelpers.findAndHookMethod("com.dragon.read.base.util.LogWrapper", lpparam.classLoader, "setLogLevel", int.class, new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                log(param);
+                param.args[0] = logLevel;
+            }
+        });
+        XposedHelpers.findAndHookMethod("com.dragon.read.base.util.LogWrapper", lpparam.classLoader, "printLog", "java.lang.String", int.class, "java.lang.String", "java.lang.String", new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                String module = (String) param.args[0];
+                int level = (int) param.args[1];
+                if (level < logLevel) {
+                    return;
+                }
+                String tag = (String) param.args[2];
+                String msg = (String) param.args[3];
+                // 打印日志到xposed，原日志不处理，
+                String log = String.format("[%s][%s] %s", module, tag, msg);
+                XposedBridge.log(log);
+                param.setResult(null);
+            }
+        });
     }
 
     private void hookLuckyDog(XC_LoadPackage.LoadPackageParam lpparam) {
