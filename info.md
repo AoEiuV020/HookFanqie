@@ -41,3 +41,7 @@ com.dragon.read.base.ad.a#a
 
 6.5.5.32:
 vip还是com.dragon.read.user.model.VipInfoModel，但是构造方法参数变多了， 
+搜“会员”，com.dragon.read.ad.cartoon.d.a 这里有漫画板块的一堆免广告判断条件，
+有个 NsVipApi.IMPL.privilegeService().hasNoAdFollAllScene() 所有广告场景免广告，看着不错，但是这种接口不好hook,
+有个 com.dragon.read.app.i.b 最小合规必要开关, 这个好像影响范围很大，都是良心向的，但实际就是“简单模式”，功能有限制，无法登录，
+搜"gold_reverse"找到福利tag的开关，

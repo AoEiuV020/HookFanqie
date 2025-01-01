@@ -24,12 +24,12 @@ public class MainHook implements IXposedHookLoadPackage {
             // hookKillAd(lpparam);
             // hookUpdate(lpparam);
             // hookPoplive(lpparam);
-            // hookLuckyDog(lpparam);
+            hookLuckyDog(lpparam);
         }
     }
 
     private void hookLuckyDog(XC_LoadPackage.LoadPackageParam lpparam) {
-        XposedHelpers.findAndHookMethod("com.dragon.read.polaris.d", lpparam.classLoader, "b", new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod("com.dragon.read.polaris.g", lpparam.classLoader, "b", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 param.setResult(false);
