@@ -46,3 +46,6 @@ vip还是com.dragon.read.user.model.VipInfoModel，但是构造方法参数变�
 有个 com.dragon.read.app.i.b 最小合规必要开关, 这个好像影响范围很大，都是良心向的，但实际就是“简单模式”，功能有限制，无法登录，
 搜"gold_reverse"找到福利tag的开关，
 搜”isCurrentVersionOut“去除更新提示，
+搜”implements NsPrivilegeManager“找到了privilegeService实现类，
+hook hasNoAdFollAllScene的话章末商品广告不会有，但会出现一个”看视频免30分钟广告“的文字链接，
+搜"video_reader_ad"找到读取配置的方法，可以关闭那个看视频的文字链接，

@@ -19,7 +19,7 @@ public class MainHook implements IXposedHookLoadPackage {
         if (Objects.equals(lpparam.processName, lpparam.packageName)) {
             hookDebug(lpparam);
             hookVip(lpparam);
-            // hookKillAd(lpparam);
+            hookKillAd(lpparam);
             hookUpdate(lpparam);
             hookLuckyDog(lpparam);
         }
@@ -35,13 +35,7 @@ public class MainHook implements IXposedHookLoadPackage {
     }
 
     private void hookKillAd(XC_LoadPackage.LoadPackageParam lpparam) {
-        XposedHelpers.findAndHookMethod("com.dragon.read.user.h", lpparam.classLoader, "e", new XC_MethodHook() {
-            @Override
-            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
-                param.setResult(true);
-            }
-        });
-        XposedHelpers.findAndHookMethod("com.dragon.read.base.ad.a", lpparam.classLoader, "a", java.lang.String.class, java.lang.String.class, new XC_MethodHook() {
+        XposedHelpers.findAndHookMethod("com.dragon.read.base.ad.a", lpparam.classLoader, "a", "java.lang.String", "java.lang.String", new XC_MethodHook() {
             @Override
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 if (param.args[0].toString().contains("_ad")) {
@@ -49,6 +43,26 @@ public class MainHook implements IXposedHookLoadPackage {
                 }
             }
         });
+        var r = new XC_MethodHook() {
+            @Override
+            protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
+                param.setResult(true);
+                log(param);
+            }
+        };
+        var clazz = XposedHelpers.findClass("com.dragon.read.component.biz.impl.i.f", lpparam.classLoader);
+        String[] methods = {
+                "isVip",
+                "hasNoAdFollAllScene",
+                "isAnyVip",
+                "hasNoAdPrivilege",
+                "adVipAvailable",
+        };
+        for (String method : methods) {
+            XposedHelpers.findAndHookMethod(clazz, method, r);
+        }
+        XposedHelpers.findAndHookMethod(clazz, "a", "com.dragon.read.rpc.model.VipSubType", r);
+        XposedHelpers.findAndHookMethod(clazz, "isNoAd", "java.lang.String", r);
     }
 
     private void hookUpdate(XC_LoadPackage.LoadPackageParam lpparam) {
