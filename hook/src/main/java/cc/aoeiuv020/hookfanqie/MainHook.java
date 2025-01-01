@@ -97,6 +97,10 @@ public class MainHook implements IXposedHookLoadPackage {
             protected void beforeHookedMethod(MethodHookParam param) throws Throwable {
                 var cardType = (Enum<?>) XposedHelpers.getObjectField(param.args[0], "a");
                 if (Objects.equals(cardType.name(), "EC_MAIL")) {
+                    // 我的页面商城广告卡片，
+                    param.setResult(null);
+                } else if (Objects.equals(cardType.name(), "POLARIS")) {
+                    // 我的页面福利钱包卡片，
                     param.setResult(null);
                 }
             }
