@@ -45,8 +45,7 @@ jobs:
               num=${num%/merge}
               BUILD_VERSION=pr-${num}-"$(date +'%Y%m%d%H%M%S')"
           else
-              CREATE_RELEASE="true"
-              echo PRE_RELEASE="true" >> .custom_env
+              CREATE_RELEASE="false"
               BUILD_VERSION="$(date +'%Y%m%d%H%M%S')"
               RELEASE_BODY=$(echo '${{ toJson(github.event.commits) }}' |jq -r 'map("### "+.message)|join("\n\n------\n")')
               TG_CHANGELOG="$(echo "$RELEASE_BODY"|sed -n "s/### \(.*\)/\1/p" |sed -n '{;=;p}' | sed "N;s/\n/. /g")"
